@@ -46,6 +46,16 @@ def _pyqt5():
 
     QtWidgets.QHeaderView.setResizeMode = setResizeMode
 
+    # provide mocked UnicodeUTF8 For backward compatibility
+    QtWidgets.QApplication.UnicodeUTF8 = -1
+
+    old_translate_fn = QtWidgets.QApplication.translate
+
+    def translate(context, key, disambiguation=None, encoding=None, n=0):
+        return old_translate_fn(context, key, disambiguation, n)
+
+    QtWidgets.QApplication.translate = staticmethod(translate)
+
     return PyQt5
 
 
@@ -119,6 +129,16 @@ def _pyside2():
         return self.setSectionResizeMode(*args, **kwargs)
 
     QtWidgets.QHeaderView.setResizeMode = setResizeMode
+
+    # provide mocked UnicodeUTF8 For backward compatibility
+    QtWidgets.QApplication.UnicodeUTF8 = -1
+
+    old_translate_fn = QtWidgets.QApplication.translate
+
+    def translate(context, key, disambiguation=None, encoding=None, n=0):
+        return old_translate_fn(context, key, disambiguation, n)
+
+    QtWidgets.QApplication.translate = staticmethod(translate)
 
     return PySide2
 

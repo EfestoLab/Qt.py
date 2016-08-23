@@ -209,6 +209,105 @@ if PYTHON == 2:
             sip.setapi("QString", 1)
             assert_raises(ImportError, __import__, "Qt")
 
+def test_translate_and_UnicodeUTF8_in_pyside():
+    _str_ = str
+    if PYTHON == 2:
+        _str_ = basestring
+
+    with pyside():
+        from Qt import QtWidgets
+
+        # this does exist in PySide
+        assert QtWidgets.QApplication.UnicodeUTF8 is not None
+
+        # use patched method with old arguments
+        result = QtWidgets.QApplication.translate(
+            u'Href_Gui',
+            u'Text',
+            u'None',
+            QtWidgets.QApplication.UnicodeUTF8
+        )
+        assert isinstance(result, _str_)
+
+
+def test_translate_and_UnicodeUTF8_in_pyqt4():
+    _str_ = str
+    if PYTHON == 2:
+        _str_ = basestring
+
+    with pyqt4():
+        from Qt import QtWidgets
+
+        # this does exist in PyQt4
+        assert QtWidgets.QApplication.UnicodeUTF8 is not None
+
+        # use patched method with old arguments
+        result = QtWidgets.QApplication.translate(
+            u'Href_Gui',
+            u'Text',
+            u'None',
+            QtWidgets.QApplication.UnicodeUTF8
+        )
+
+        assert isinstance(result, _str_)
+
+
+def test_translate_and_UnicodeUTF8_in_pyside2():
+    _str_ = str
+    if PYTHON == 2:
+        _str_ = basestring
+
+    with pyside2():
+        from Qt import QtWidgets
+
+        # this does not exist in PySide2 by default
+        assert QtWidgets.QApplication.UnicodeUTF8 is -1
+
+        # use patched method with old arguments
+        result = QtWidgets.QApplication.translate(
+            u'Href_Gui',
+            u'Text',
+            u'None',
+            QtWidgets.QApplication.UnicodeUTF8
+        )
+        assert isinstance(result, _str_)
+
+        # use patched method with new arguments
+        result = QtWidgets.QApplication.translate(
+            u'SomeText',
+            u'Form',
+            u'None'
+        )
+        assert isinstance(result, _str_)
+
+def test_translate_and_UnicodeUTF8_in_PyQt5():
+    _str_ = str
+    if PYTHON == 2:
+        _str_ = basestring
+
+    with pyqt5():
+        from Qt import QtWidgets
+
+        # this does not exist in PyQt5 by default
+        assert QtWidgets.QApplication.UnicodeUTF8 is -1
+
+        # use patched method with old arguments
+        result = QtWidgets.QApplication.translate(
+            u'SomeText',
+            u'Form',
+            u'None',
+            QtWidgets.QApplication.UnicodeUTF8
+        )
+        assert isinstance(result, _str_)
+
+        # use patched method with new arguments
+        result = QtWidgets.QApplication.translate(
+            u'SomeText',
+            u'Form',
+            u'None'
+        )
+        assert isinstance(result, _str_)
+
 
 def test_qheaderview_pyqt4_forward_compatiblity():
     with pyqt4():
@@ -242,3 +341,4 @@ def test_qheaderview_pyside2_forward_compatiblity():
         from Qt import QtWidgets
         assert QtWidgets.QHeaderView.setSectionResizeMode
         assert QtWidgets.QHeaderView.setResizeMode
+
